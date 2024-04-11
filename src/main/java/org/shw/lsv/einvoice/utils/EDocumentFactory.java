@@ -12,6 +12,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+
+import org.adempiere.core.domains.models.X_E_Activity;
 import org.compiere.model.MClient;
 import org.compiere.model.MInvoice;
 import org.compiere.model.MOrgInfo;
@@ -59,6 +61,8 @@ public abstract class EDocumentFactory {
 	public static String TAXINDICATOR_EXT 							= "EXT";
 	public static String TAXINDICATOR_RET 							= "RET";
 	public static String CHARGETYPE_CTAJ	 						= "CTAJ";
+	
+	public static String Columnname_E_Activity_ID 					= "E_Activity_ID";
 	
 	
 	
@@ -161,6 +165,8 @@ public abstract class EDocumentFactory {
 		jsonApendice.put(CreditoFiscal.APENDICE, jsonTributosArray);
 		return jsonApendice;
 	}
+	
+	
 
 
 }

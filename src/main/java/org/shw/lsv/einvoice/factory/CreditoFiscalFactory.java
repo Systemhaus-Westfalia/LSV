@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
 
+import org.adempiere.core.domains.models.X_E_Activity;
 import org.apache.commons.lang3.StringUtils;
 import org.compiere.model.MBPartner;
 import org.compiere.model.MBPartnerLocation;
@@ -269,12 +270,14 @@ public class CreditoFiscalFactory extends EDocumentFactory {
 	private JSONObject generateEmisorInputData() {
 		System.out.println("CreditoFiscal: start collecting JSON data for Emisor");
 		
+		int activityID = client.get_ValueAsInt(Columnname_E_Activity_ID);
+		X_E_Activity e_Activity = new X_E_Activity(Env.getCtx(), activityID, trxName);
 		JSONObject jsonObjectEmisor = new JSONObject();
 		jsonObjectEmisor.put(CreditoFiscal.NIT, orgInfo.getTaxID().replace("-", ""));
 		jsonObjectEmisor.put(CreditoFiscal.NRC, StringUtils.leftPad(orgInfo.getDUNS().trim().replace("-", ""), 7));
 		jsonObjectEmisor.put(CreditoFiscal.NOMBRE, client.getDescription());
-		jsonObjectEmisor.put(CreditoFiscal.CODACTIVIDAD, client.getE_Activity().getValue());
-		jsonObjectEmisor.put(CreditoFiscal.DESCACTIVIDAD, client.getE_Activity().getName());
+		jsonObjectEmisor.put(CreditoFiscal.CODACTIVIDAD, e_Activity.getValue());
+		jsonObjectEmisor.put(CreditoFiscal.DESCACTIVIDAD, e_Activity.getName());
 		jsonObjectEmisor.put(CreditoFiscal.NOMBRECOMERCIAL, client.getName());
 		jsonObjectEmisor.put(CreditoFiscal.TIPOESTABLECIMIENTO, client.getE_PlantType().getValue());
 
