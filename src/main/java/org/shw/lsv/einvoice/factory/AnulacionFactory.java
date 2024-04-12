@@ -194,7 +194,7 @@ public class AnulacionFactory extends EDocumentFactory {
 		
 		JSONObject jsonObjectMotivo = new JSONObject();
 		jsonObjectMotivo.put(Anulacion.TIPOANULACION, 2);		
-		jsonObjectMotivo.put(Anulacion.MOTIVOANULACION, "Rescindir de la operación realizada.");		
+		jsonObjectMotivo.put(Anulacion.MOTIVOANULACION, "Rescindir de la operacion realizada.");		
 		jsonObjectMotivo.put(Anulacion.NOMBRERESPONSABLE, client.getDescription());	
 		jsonObjectMotivo.put(Anulacion.TIPDOCRESPONSABLE, "36");	
 		jsonObjectMotivo.put(Anulacion.NUMDOCRESPONSABLE, orgInfo.getTaxID().replace("-", ""));	
