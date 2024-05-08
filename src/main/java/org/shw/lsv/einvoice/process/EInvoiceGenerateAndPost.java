@@ -66,7 +66,7 @@ public class EInvoiceGenerateAndPost extends EInvoiceGenerateAndPostAbstract imp
 
 		startdate = (Timestamp)(client.get_Value("ei_Startdate"));
 		System.out.println("\n" + "******************************************************");
-		System.out.println("Process EInvoiceGenerateAndPost: started with Client '" + client.getName() + "', ID: " + getClientId());
+		System.out.println("Process EInvoiceGenerateAndPost Voided: started with Client '" + client.getName() + "', ID: " + getClientId());
 		registration = new Query(getCtx(), MADAppRegistration.Table_Name, "EXISTS(SELECT 1 FROM AD_AppSupport s "
 				+ "WHERE s.AD_AppSupport_ID = AD_AppRegistration.AD_AppSupport_ID "
 				+ "AND s.ApplicationType = ?"
@@ -95,12 +95,12 @@ public class EInvoiceGenerateAndPost extends EInvoiceGenerateAndPostAbstract imp
 			final int length = invoiceIds.length;
 			noCompletados = length;
 			if(length==0) {
-				System.out.println("****************** Process EInvoiceGenerateAndPost: There is no invoice to process!!!");
-				System.out.println("Process EInvoiceGenerateAndPost: finished" + "\n");
+				System.out.println("****************** Process EInvoiceGenerateAndPost Voided: There is no invoice to process!!!");
+				System.out.println("Process EInvoiceGenerateAndPost Voided: finished" + "\n");
 				return " No hay Documentos anulados pendientes";
 			}
 
-			System.out.println("Collecting invoices to be processed..."); 
+			System.out.println("Collecting voided invoices to be processed..."); 
 			Trx updateTransaction = Trx.get("UpdateDB_ei_Processing", true);  
 			StringBuffer sqlUpdate = new StringBuffer("UPDATE C_Invoice set ei_Processing = 'Y' WHERE c_INvoice_ID in (");
 			String character = ",";
