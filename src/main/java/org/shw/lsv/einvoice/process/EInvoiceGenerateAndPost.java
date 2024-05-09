@@ -48,7 +48,11 @@ public class EInvoiceGenerateAndPost extends EInvoiceGenerateAndPostAbstract imp
 	protected String doIt() throws Exception
 	{
 		StringBuffer result = new StringBuffer();
+		System.out.println("\n" + "******************************************************");
+		System.out.println("\n" + "Start ProcessInvoices");
 		result.append(processInvoices());
+		System.out.println("\n" + "******************************************************");
+		System.out.println("\n" + "Start ProcessVoided");
 		result.append(processVoided());
 		return result.toString();
 	}
