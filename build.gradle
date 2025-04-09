@@ -54,6 +54,8 @@ dependencies {
 	api 'org.apache.commons:commons-lang3:3.0'
 	
         api "${baseGroupId}:human-resource-and-payroll:${baseVersion}"
+	
+        api "${baseGroupId}:cashflow:${baseVersion}"
 
 }
 
