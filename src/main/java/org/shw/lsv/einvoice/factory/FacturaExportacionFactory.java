@@ -341,6 +341,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 	private JSONObject generateResumenInputData() {
 		System.out.println("Start collecting JSON data for Resumen");
 		BigDecimal totalGravada = Env.ZERO;	
+		BigDecimal montotributos	= Env.ZERO;
 		String totalLetras=Msg.getAmtInWords(client.getLanguage(), invoice.getGrandTotal().setScale(2).toString());
 
 		List<MInvoiceTax> invoiceTaxes = new Query(contextProperties , MInvoiceTax.Table_Name , "C_Invoice_ID=?" , trxName)
@@ -366,6 +367,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 				}
 				else if (invoiceTax.getC_Tax().getTaxIndicator().equals(TAXINDICATOR_IVA)) {
 					totalGravada = totalGravada.add(invoiceTax.getTaxBaseAmt());
+					montotributos = montotributos.add(invoiceTax.getTaxAmt());
 				}
 			}
 				
@@ -378,7 +380,7 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 		jsonObjectResumen.put(FacturaExportacion.CONDICIONOPERACION, FacturaExportacion.CONDICIONOPERACION_A_CREDITO);
 		jsonObjectResumen.put(FacturaExportacion.TOTALDESCU, Env.ZERO);
 		jsonObjectResumen.put(FacturaExportacion.DESCUENTO, Env.ZERO);
-		jsonObjectResumen.put(FacturaExportacion.MONTOTOTALOPERACION, invoice.getGrandTotal());
+		jsonObjectResumen.put(FacturaExportacion.MONTOTOTALOPERACION, totalGravada);
 		jsonObjectResumen.put(FacturaExportacion.SEGURO, Env.ZERO);
 		jsonObjectResumen.put(FacturaExportacion.FLETE, Env.ZERO);
 		
@@ -451,10 +453,18 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 				description = name;
 			if (description.length()>999)
 				description = description.substring(0, 998);
-			jsonTributosArray.put("C3");
-			jsonCuerpoDocumentoItem. put( FacturaExportacion.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");
+			Boolean createTribute = invoiceLine.getC_Charge_ID() > 0 
+			&& invoiceLine.getC_Charge().getC_ChargeType().getValue().equals(CHARGETYPE_CTAJ)?false:true;
+			if (createTribute) {
+				jsonTributosArray.put("C3");
+				jsonCuerpoDocumentoItem. put( FacturaExportacion.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");
+			}
+			else
+			{
+				jsonCuerpoDocumentoItem. put( FacturaExportacion.TRIBUTOS, jsonTributosArray); //tributosItems.add("20");
+			}
 			
-			jsonCuerpoDocumentoItem.put(FacturaExportacion.UNIMEDIDA, 59);
+			jsonCuerpoDocumentoItem.put(FacturaExportacion.UNIMEDIDA, 99);
 			jsonCuerpoDocumentoItem.put(FacturaExportacion.DESCRIPCION, description);
 			jsonCuerpoDocumentoItem.put(FacturaExportacion.PRECIOUNI, precioUnitario);
 			jsonCuerpoDocumentoItem.put(FacturaExportacion.MONTODESCU, Env.ZERO);
