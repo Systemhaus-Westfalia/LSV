@@ -5,7 +5,7 @@ plugins {
 }
 
 ext {
-    libraryRepo     = "https://maven.pkg.github.com/Systemhaus-Westfalia/zk-ui"
+    libraryRepo     = "https://maven.pkg.github.com/Systemhaus-Westfalia/LSV"
     patchVersion    = System.getenv("ADEMPIERE_LIBRARY_VERSION") ?: "local-1.0.1"
     baseVersion     = "shw-air-terminal-vertical-1.0.57"
     baseGroupId     = "com.erpya"
