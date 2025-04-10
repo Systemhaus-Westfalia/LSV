@@ -9,7 +9,7 @@ ext {
     patchVersion    = System.getenv("ADEMPIERE_LIBRARY_VERSION") ?: "local-1.0.1"
     baseVersion     = "shw-air-terminal-vertical-1.0.57"
     baseGroupId     = "com.erpya"
-    publishGroupId  = "io.github.adempiere"
+    publishGroupId  = "com.shw"
 }
 
 
