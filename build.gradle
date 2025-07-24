@@ -1,12 +1,19 @@
 plugins {
-	id 'java-library'
-	id 'maven-publish'
-	id 'signing'
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
 }
 
+ext {
+    libraryRepo       = "https://maven.pkg.github.com/Systemhaus-Westfalia/LSV"
+    patchVersion      = System.getenv("ADEMPIERE_LIBRARY_VERSION") ?: "local-1.0.1"
+    baseVersion       = "shw-air-terminal-vertical-1.0.57"
+    baseGroupId       = "com.erpya"
+    publishGroupId    = "com.shw"
+}
+
+
 sourceCompatibility = 1.11
-def baseVersion = 'shw-air-terminal-vertical-1.0.57'
-def baseGroupId = 'com.erpya'
 
 repositories {
     mavenLocal()
@@ -15,8 +22,8 @@ repositories {
 
 allprojects {
     tasks.withType(Javadoc) {
-    	options.addStringOption('Xdoclint:none', '-quiet')
-   	}
+        options.addStringOption('Xdoclint:none', '-quiet')
+       }
 }
 
 compileJava { 
@@ -34,76 +41,71 @@ dependencies {
             '*.jar'
         ]
     )
-    //	ADempiere Core
+    //     ADempiere Core
     api "${baseGroupId}:base:${baseVersion}"
-    // Jakarta RESTful Web Services
-	// https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api
-	api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
+    api "${baseGroupId}:human-resource-and-payroll:${baseVersion}"
+    api "${baseGroupId}:cashflow:${baseVersion}"
+    api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
+    api 'org.glassfish.jersey.core:jersey-client:2.34'
+    api 'org.glassfish.jersey.inject:jersey-hk2:2.34'
 
-	// Jersey core client implementation
-	// https://mvnrepository.com/artifact/  org.glassfish.jersey.core/jersey-client
-	api 'org.glassfish.jersey.core:jersey-client:2.34'
-	// https://mvnrepository.com/artifact/org.glassfish.jersey.inject/jersey-hk2
-	api 'org.glassfish.jersey.inject:jersey-hk2:2.34'
+    // JSON in Java
+    // https://mvnrepository.com/artifact/org.json/json
+    api 'org.json:json:20211205'
+    
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    api 'org.apache.commons:commons-lang3:3.0'
 
-	// JSON in Java
-	// https://mvnrepository.com/artifact/org.json/json
-	api 'org.json:json:20211205'
-	
-	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-	api 'org.apache.commons:commons-lang3:3.0'
+    // https://mvnrepository.com/artifact/org.telegram/telegrambots
+    api 'org.telegram:telegrambots:6.0.1'
+
+    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+    api 'com.itextpdf:itextpdf:5.5.2'
+
+
 
 }
 
 sourceSets {
     main {
-         java {
+          java {
             srcDirs = ['src/main/java']
-         }
+          }
     }
 }
-
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
-
-def entityType = 'D'
-group = "com.erpya"
-version = System.getenv("ADEMPIERE_LIBRARY_VERSION") ?: "local-1.0.0"
 
 jar {
-	manifest {
-		attributes(
-			"Implementation-Title": "ADempiere Template Management",
-			"Implementation-Version": version,
-			"EntityType": entityType
-		)
+    manifest {
+        attributes(
+            "Implementation-Title": "Localizacion El Salvador (Sistemas Aereos)",
+            "Implementation-Version": patchVersion,
+            "EntityType": "LSV-SAPROD"
+        )
     }
 }
+
 
 publishing {
     repositories {
-		mavenLocal()
-
+        mavenLocal()
         maven {
-            url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            url = libraryRepo
             credentials {
-                username = findProperty("sonatypeUsername")
-                password = findProperty("sonatypePassword")
+                username = System.getenv("GITHUB_DEPLOY_USER") ?: System.properties['deploy.user']
+                password = System.getenv("GITHUB_DEPLOY_TOKEN") ?: System.properties['deploy.token'] 
             }
         }
     }
+    
     publications {
-        mavenJava(MavenPublication) {
-			groupId = group
-			artifactId = 'location-el-salvador'
-			version = version
-           	from components.java
-           	pom {
-                name = 'Localización El Salvador'
-                description = 'Localización para El salvador de Systemhaus Westfalia'
+        maven(MavenPublication) {
+            groupId = publishGroupId
+            artifactId = 'lsv-saprod'
+            version = patchVersion
+                from components.java
+                pom {
+                name = 'Localización El Salvador (Sistemas Aereos)'
+                description = 'Localización para El salvador (Sistemas Aereos) de Systemhaus Westfalia'
                 url = 'http://adempiere.io/'
                 licenses {
                     license {
@@ -113,45 +115,12 @@ publishing {
                 }
                 developers {
                     developer {
-                        id = 'yamelsenih'
-                        name = 'Yamel Senih'
-                        email = 'ysenih@erpya.com'
+                        id = 'SusanneCalderon'
+                        name = 'Susanne Calderon'
+                        email = 'Susanne.de.Calderon@westfalia-it.com'
                     }
                 }
-                scm {
-                	//	Meanwhile it is not published in Adempiere
-                    //connection = 'scm:git:git://github.com/adempiere/location-el-salvador.git'
-                    //developerConnection = 'scm:git:ssh://github.com/adempiere/location-el-salvador.git'
-                    //url = 'http://github.com/adempiere/location-el-salvador'
-                    connection = 'scm:git:git://github.com/Systemhaus-Westfalia/LSV.git'
-                    developerConnection = 'scm:git:ssh://github.com/Systemhaus-Westfalia/LSV.git'
-                    url = 'http://github.com/Systemhaus-Westfalia/LSV'
-                }
             }
-		}
-	}
-}
-
-
-task cleanBuildPublishLocal(type: GradleBuild) {
-	tasks = ['clean', 'build', 'publishToMavenLocal']
-}
-
-
-signing {
-	def isReleaseVersion = !version.toString().startsWith("local") && !version.toString().endsWith("-SNAPSHOT")
-
-	sign configurations.archives
-
-	setRequired {
-		// signing is required if this is a release version and the artifacts are to be published
-		// do not use hasTask() as this require realization of the tasks that maybe are not necessary
-		(isReleaseVersion || version.toString().equals("build")) && gradle.taskGraph.allTasks.any {
-			it.equals(PublishToMavenRepository)
-		}
-	}
-	def signingKey = findProperty("signingKey")
-    def signingPassword = findProperty("signingPassword")
-    useInMemoryPgpKeys(signingKey, signingPassword)
-    sign publishing.publications.mavenJava
+        }
+    }
 }

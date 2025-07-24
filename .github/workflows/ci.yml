@@ -8,14 +8,14 @@ on:
   # Triggers the workflow on push or pull request events but only for the develop branch
   push:
     branches:
-      - '*'         # matches every branch that doesn't contain a '/'
-      - '*/*'       # matches every branch containing a single '/'
-      - '**'        # matches every branch
+      - '*'          # matches every branch that doesn't contain a '/'
+      - '*/*'        # matches every branch containing a single '/'
+      - '**'         # matches every branch
   pull_request:
     branches:
-      - '*'         # matches every branch that doesn't contain a '/'
-      - '*/*'       # matches every branch containing a single '/'
-      - '**'        # matches every branch
+      - '*'          # matches every branch that doesn't contain a '/'
+      - '*/*'        # matches every branch containing a single '/'
+      - '**'         # matches every branch
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -38,7 +38,9 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
         with:
-          gradle-version: 8.0.1
+          gradle-version: 8.0.2
           arguments: build
         env:
           ADEMPIERE_LIBRARY_VERSION: 'build'
+          GITHUB_DEPLOY_USER: ${{ github.actor }}
+          GITHUB_DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
