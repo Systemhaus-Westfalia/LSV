@@ -25,3 +25,15 @@ hs_err_pid*
 /bin/
 /build/
 /.gradle/
+
+
+# Gradle build files (if not meant for version control)
+# NOTE: build.gradle is usually tracked unless it's a specific local override
+# If you truly want to ignore it, uncomment the line below.
+ build.gradle
+
+# YAML configuration files (if not meant for version control)
+# NOTE: *.yml files are often tracked (e.g., Spring Boot application.yml)
+# If you truly want to ignore ALL .yml files, uncomment the line below.
+ *.yml
+
