@@ -206,24 +206,8 @@ public class FacturaExportacionFactory extends EDocumentFactory {
 		System.out.println("Start collecting JSON data for Identificacion");
 
 
-		String prefix = invoice.getC_DocType().getDefiniteSequence().getPrefix();
-		String documentno = invoice.getDocumentNo().replace(prefix,"");
-		String suffix = invoice.getC_DocType().getDefiniteSequence().getSuffix();		
-		if (suffix != null && suffix.length()>0) {
-			String firstsuffix = suffix.substring(0,1);
-			int position = documentno.indexOf(firstsuffix);
-			if (position >0)
-				documentno = documentno.substring(0,position);
-		}
-		String idIdentification  = StringUtils.leftPad(documentno , 15,"0");
-		String duns = orgInfo.getDUNS().replace("-", "");
-		
-		String numeroControl = "DTE-" + invoice.getC_DocType().getE_DocType().getValue()
-				+ "-"+ StringUtils.leftPad(duns.trim(), 8,"0") + "-"+ idIdentification;
-		Integer invoiceID = invoice.get_ID();
-		
-		Integer clientID = (Integer)client.getAD_Client_ID();
-		String codigoGeneracion = StringUtils.leftPad(clientID.toString(), 8, "0") + "-0000-0000-0000-" + StringUtils.leftPad(invoiceID.toString(), 12,"0");
+		String numeroControl = createNumeroControl(invoice, client);
+		String codigoGeneracion = createCodigoGeneracion(invoice);
 		DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 		Calendar cal = Calendar.getInstance();
 		String horEmi = timeFormat.format(cal.getTime());

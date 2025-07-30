@@ -11,13 +11,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.adempiere.core.domains.models.X_E_Activity;
+import org.adempiere.core.domains.models.X_E_DocType;
+import org.apache.commons.lang3.StringUtils;
 import org.compiere.model.MClient;
+import org.compiere.model.MDocType;
 import org.compiere.model.MInvoice;
 import org.compiere.model.MOrgInfo;
+import org.compiere.model.MPOS;
+import org.compiere.model.Query;
 import org.compiere.util.DB;
+import org.compiere.util.Env;
 import org.compiere.util.Language;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -164,6 +171,58 @@ public abstract class EDocumentFactory {
 		
 		jsonApendice.put(CreditoFiscal.APENDICE, jsonTributosArray);
 		return jsonApendice;
+	}
+	
+	public String createNumeroControl(MInvoice invoice, MClient client) {
+		String prefix = Optional.ofNullable(invoice.getC_DocType().getDefiniteSequence().getPrefix()).orElse("");
+		String documentno = invoice.getDocumentNo().replace(prefix,"");
+		String suffix = Optional.ofNullable(invoice.getC_DocType().getDefiniteSequence().getSuffix()).orElse("");	
+		documentno = documentno.replace(suffix,"");
+		String idIdentification  = StringUtils.leftPad(documentno, 15,"0");
+		MPOS mpos = null;
+		String pos = "";
+		if (invoice.getC_POS_ID()>0) {
+			mpos = (MPOS)invoice.getC_POS();
+			pos = mpos.get_ValueAsString("ei_POS");
+		}
+		if(mpos == null)
+		{
+			mpos = new Query(invoice.getCtx(), MPOS.Table_Name, "AD_Org_ID=? ", trxName)
+					.setParameters(invoice.getAD_Org_ID())
+					.setOnlyActiveRecords(true)
+					.setOrderBy("C_POS_ID")
+					.first();
+			if (mpos != null)
+			pos = mpos.get_ValueAsString("ei_POS");
+		}
+		if(mpos == null){
+			mpos = new Query(invoice.getCtx(), MPOS.Table_Name , "",  trxName)
+					.setClient_ID()
+					.setOnlyActiveRecords(true)
+					.setOrderBy("C_POS_ID")
+					.first();
+			if (pos != null)
+			pos = mpos.get_ValueAsString("ei_POS");			
+		}
+		else {
+			
+		}
+		MOrgInfo orgInfo = MOrgInfo.get(invoice.getCtx(), invoice.getAD_Org_ID(), invoice.get_TrxName());
+		String idPosCompany = orgInfo.get_ValueAsString("ei_Sucursal") + pos;
+		String numeroControl = "DTE-" + docType_getE_DocType((MDocType)invoice.getC_DocType()).getValue()
+				+ "-"+ StringUtils.leftPad(idPosCompany, 8,"0") + "-"+ idIdentification;
+		return numeroControl;
+	}
+	
+	public String createCodigoGeneracion(MInvoice invoice) {
+		
+		String numControl = invoice.get_UUID().toUpperCase();
+		return numControl;		
+	}
+	
+	public X_E_DocType  docType_getE_DocType(MDocType docType) {
+		X_E_DocType e_docType = new X_E_DocType(Env.getCtx()	, docType.get_ValueAsInt(X_E_DocType.COLUMNNAME_E_DocType_ID), null);
+		return e_docType;
 	}
 	
 	
