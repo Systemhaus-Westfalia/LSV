@@ -139,16 +139,17 @@ public class SVBACToken implements IDeclarationProvider {
 			System.out.println("Response: Post" );
 			String result = "";
 			Response response = invocationBuilder.post(entity);
+			int status = response.getStatus();
+			System.out.println("EBanking GetToken: " + status);
 			if (response.getStatus()==HTTP_RESPONSE_200_OK) {
 
 				String output = response.readEntity(String.class);
-				JSONObject jsonoutput = new JSONObject(output); 	
+				JSONObject jsonoutput = new JSONObject(output);				
 				String access_token = jsonoutput.getString("access_token");
 				result = access_token;
 			}	
 			
 			else {
-				int status = response.getStatus();
 				String error = "error " + status ;
 				client.set_ValueOfColumn("ei_jwt", error);
 	        	client.saveEx();     

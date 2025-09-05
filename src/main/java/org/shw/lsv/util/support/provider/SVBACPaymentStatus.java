@@ -254,9 +254,11 @@ public class SVBACPaymentStatus implements IDeclarationProvider {
 
 
 		int status = response.getStatus();
+		System.out.println("EBanking PaymentStatus: " + status);
 		String output = response.readEntity(String.class);
 		if (response.getStatus() == 403 || status == 401) {
-			return "";
+			System.out.println("Verlasse Process Zahlungsstatus: Status: " +  status + "output: " + output);
+			return "Response:" +  output;
 		}
 
 
@@ -264,7 +266,8 @@ public class SVBACPaymentStatus implements IDeclarationProvider {
         JsonProcessor processor = new JsonProcessor(collector);
 		JSONObject jsonResponse = new JSONObject(output);
 		if(response.getStatus() !=200 && response.getStatus() != 201) {
-			return "";
+			System.out.println("Verlasse Process Zahlungsstatus: Status: " +  status + "output: " + output);
+			return "Response:" +  output;
 		}
 
 		else if (response.getStatus() ==200 ) 

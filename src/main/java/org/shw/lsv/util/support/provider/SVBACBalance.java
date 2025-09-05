@@ -240,26 +240,32 @@ public class SVBACBalance implements IDeclarationProvider {
 				.header("X-IBM-Client-Id", "6b443615f7adf11b1149f03da1c0f10f");
 
 
-		System.out.println("Signature: " + jsonOutput);
+		System.out.println("json_KontoStand: " + jsonOutput);
 		Entity<String> entity = Entity.json(jsonOutput);
 		Response response = invocationBuilder.post(entity);
 
 
 		int status = response.getStatus();
+		System.out.println("EBanking Status json_KontoStand: " + status);
+
 		String output = response.readEntity(String.class);
-		if (response.getStatus() == 403 || status == 401) {
-			return "";
+		if (status == 403 || status == 401) { 	
+
+			System.out.println("Verlasse Process Kontostand: Status: " +  status + "output: " + output);
+			return "Response:" +  output;
 		}
 
 
         // 2. Inject collector into processor
         JsonProcessor processor = new JsonProcessor(collector);
 		JSONObject jsonResponse = new JSONObject(output);
-		if(response.getStatus() !=200 && response.getStatus() != 201) {
-			return "";
+		if(status !=200 && status != 201) {
+
+			System.out.println("Verlasse Process Kontostand: Status: " +  status + "output: " + output);
+			return "Response:" +  output;
 		}
 
-		else if (response.getStatus() ==200 ) 
+		else if (status ==200 ) 
 		{
 			StringBuffer log = new StringBuffer();
 
