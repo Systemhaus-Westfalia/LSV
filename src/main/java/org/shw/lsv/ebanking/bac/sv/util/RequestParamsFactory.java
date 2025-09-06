@@ -3,6 +3,7 @@ package org.shw.lsv.ebanking.bac.sv.util;
 import java.math.BigDecimal;
 
 import org.adempiere.core.domains.models.I_C_BPartner_Location;
+import org.compiere.model.MBPBankAccount;
 import org.compiere.model.MBPartner;
 import org.compiere.model.MBPartnerLocation;
 import org.compiere.model.MBank;
@@ -104,7 +105,7 @@ public final class RequestParamsFactory {
         Integer numberOfTransactions = 1;
 
         String PAYMENT_AMOUNT        = payment.getPayAmt().toString();
-        BigDecimal paymentAmount     = payment.getPayAmt();
+        BigDecimal paymentAmount     = payment.getPayAmt().setScale(2);
         payment.set_ValueOfColumn("MsgId", PYMT_DOCUMENT_ID);
         payment.saveEx();
 
@@ -154,7 +155,7 @@ public final class RequestParamsFactory {
     public static RequestParams createPain001Params_International(MPayment payment) {
     	MBankAccount bankAccount = (MBankAccount)payment.getC_BankAccount();
     	MBank bank = (MBank)bankAccount.getC_Bank();
-    	MBankAccount bankaccountDest = (MBankAccount)payment.getC_BP_BankAccount();
+    	MBPBankAccount bankaccountDest = (MBPBankAccount)payment.getC_BP_BankAccount();
     	MBank bankDest = (MBank)bankaccountDest.getC_Bank();
     	MBPartnerLocation partnerLocation = getLocationBill((MBPartner)payment.getC_BPartner());
     	String swiftDest = bankDest.getSwiftCode();
@@ -190,7 +191,7 @@ public final class RequestParamsFactory {
         Integer numberOfTransactions = 1;
 
         String PAYMENT_AMOUNT        = payment.getPayAmt().toString();
-        BigDecimal paymentAmount     = payment.getPayAmt();
+        BigDecimal paymentAmount     = payment.getPayAmt().setScale(2);
 
         return new RequestParams()
             .setBicfiFr(       BIC_SISTEMAS_AEREOS)
@@ -260,7 +261,7 @@ public final class RequestParamsFactory {
         String RECEIVER_NAME         = payment.getC_BPartner().getName();
         String CODIGO_PROVEEDOR      = payment.getC_BPartner().getValue();
         String INSTRUCTION_PRIORITY  = "NORM";
-        String RECEIVER_ACCOUNT      = payment.getC_BP_BankAccount().getA_Name();
+        String RECEIVER_ACCOUNT      = payment.getC_BP_BankAccount().getAccountNo();
         String DBTR_AGT_COUNTRY       = "SV";
         String CAT_PURPOSE_CD        = "SUPP";
         String PAYMENT_REFERENCE     = payment.getC_BPartner().getValue() + " " + payment.getDocumentNo();
@@ -269,7 +270,7 @@ public final class RequestParamsFactory {
         Integer numberOfTransactions = 1;
 
         String PAYMENT_AMOUNT        = payment.getPayAmt().toString();
-        BigDecimal paymentAmount     = payment.getPayAmt();
+        BigDecimal paymentAmount     = payment.getPayAmt().setScale(2);
         payment.set_ValueOfColumn("MsgId", PYMT_DOCUMENT_ID);
         payment.saveEx();
 

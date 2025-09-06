@@ -302,7 +302,7 @@ public class SVBACBalance implements IDeclarationProvider {
 	public String getToken() {				 
 		ProcessInfo  processInfo =
 				ProcessBuilder.create(Env.getCtx())
-				.process(SVBACGetToken.getProcessId())
+				.process(SVBACGetToken.getProcessValue())
 				.withTitle(SVBACGetToken.getProcessName())
 				.withRecordId(MBankAccount.Table_ID, bankAccountID)
 				.withoutTransactionClose()

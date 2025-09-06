@@ -326,7 +326,7 @@ public class SVBACPaymentStatus implements IDeclarationProvider {
 	public String getToken(MPayment payment) {				 
 		ProcessInfo  processInfo =
 				ProcessBuilder.create(Env.getCtx())
-				.process(SVBACGetToken.getProcessId())
+				.process(SVBACGetToken.getProcessValue())
 				.withTitle(SVBACGetToken.getProcessName())
 				.withRecordId(MBankAccount.Table_ID, payment.getC_BankAccount_ID())
 				.withoutTransactionClose()

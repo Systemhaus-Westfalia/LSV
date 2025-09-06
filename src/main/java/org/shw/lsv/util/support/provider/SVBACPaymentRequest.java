@@ -37,6 +37,7 @@ import org.compiere.util.Env;
 import org.eevolution.services.dsl.ProcessBuilder;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
+import org.json.JSONObject;
 import org.shw.lsv.ebanking.bac.sv.handling.JsonProcessor;
 import org.shw.lsv.ebanking.bac.sv.handling.JsonValidationException;
 import org.shw.lsv.ebanking.bac.sv.handling.JsonValidationExceptionCollector;
@@ -252,7 +253,13 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
 
 		else if (response.getStatus() ==200 ) 
 		{			
-			System.out.println("Starting TMST039 deserialization test...");          
+			System.out.println("Starting TMST039 deserialization test...");       
+	    	JSONObject jsonResponse = new JSONObject(output);
+	    	if (jsonResponse.has("httpCode")) {
+				payment.set_ValueOfColumn("transactionStatusReason",output);
+				payment.saveEx();
+	    	return "Internal error";		    		
+	    	}
 
 			// 3. Execute deserialization
 			try {
@@ -264,7 +271,7 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
 					Rejection rejection = document.getRejection();
 					if (rejection.getRsn() != null) {
 						payment.set_ValueOfColumn("evtCd", rejection.getRsn().getRjctgPtyRsn());
-						payment.set_ValueOfColumn("EvtDesc", rejection.getRsn().getRsnDesc());
+						payment.set_ValueOfColumn("transactionStatusReason", rejection.getRsn().getRsnDesc());
 					} else {
 
 						payment.set_ValueOfColumn("EvtDesc", "Rejection object present but Reason (Rsn) is null.");
@@ -368,6 +375,13 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
 		else if (response.getStatus() ==200 ) 
 		{			
 			System.out.println("Starting TMST039 deserialization test...");          
+	    	JSONObject jsonResponse = new JSONObject(output);
+	    	if (jsonResponse.has("httpCode")) {
+				payment.set_ValueOfColumn("EvtDesc",output);
+				payment.saveEx();
+	    	return "Internal error";		    		
+	    	}
+
 
 			// 3. Execute deserialization
 			try {
@@ -379,7 +393,7 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
 					Rejection rejection = document.getRejection();
 					if (rejection.getRsn() != null) {
 						payment.set_ValueOfColumn("evtCd", rejection.getRsn().getRjctgPtyRsn());
-						payment.set_ValueOfColumn("EvtDesc", rejection.getRsn().getRsnDesc());
+						payment.set_ValueOfColumn("transactionStatusReason", rejection.getRsn().getRsnDesc());
 					} else {
 
 						payment.set_ValueOfColumn("EvtDesc", "Rejection object present but Reason (Rsn) is null.");
@@ -428,7 +442,7 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
         collector.setPrintImmediately(true); // See errors as they happen
 
         // 2. Build test parameters
-        RequestParams params = RequestParamsFactory.createPain001Params_Domestico(payment);
+        RequestParams params = RequestParamsFactory.createPain001Params_International(payment);
         
         try {
             PAIN001Request request = RequestBuilder.build(PAIN001Request.class, params, collector);
@@ -483,7 +497,14 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
 
 		else if (response.getStatus() ==200 ) 
 		{			
-			System.out.println("Starting TMST039 deserialization test...");          
+			System.out.println("Starting TMST039 deserialization test...");         
+		    
+	    	JSONObject jsonResponse = new JSONObject(output);
+	    	if (jsonResponse.has("httpCode")) {
+				payment.set_ValueOfColumn("EvtDesc",output);
+				payment.saveEx();
+	    	return "Internal error";		    		
+	    	}
 
 			// 3. Execute deserialization
 			try {
@@ -529,7 +550,7 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
 	public String getToken(MPayment payment) {				 
 		ProcessInfo  processInfo =
 				ProcessBuilder.create(Env.getCtx())
-				.process(SVBACGetToken.getProcessId())
+				.process(SVBACGetToken.getProcessValue())
 				.withTitle(SVBACGetToken.getProcessName())
 				.withRecordId(MBankAccount.Table_ID, payment.getC_BankAccount().getC_BankAccount_ID())
 				.withoutTransactionClose()
@@ -598,7 +619,7 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
 						if (document.getSysEvtNtfctn().getEvtInf() != null) {
 							payment.set_ValueOfColumn("evtCd", document.getSysEvtNtfctn().getEvtInf().getEvtCd());
 
-							payment.set_ValueOfColumn("EvtDesc", document.getSysEvtNtfctn().getEvtInf().getEvtDesc());
+							payment.set_ValueOfColumn("transactionStatusReason", document.getSysEvtNtfctn().getEvtInf().getEvtDesc());
 							payment.set_ValueOfColumn("EvtTime", document.getSysEvtNtfctn().getEvtInf().getEvtTm());
 							payment.saveEx();
 						}
