@@ -301,6 +301,7 @@ implements ModelValidator {
 			if (timing == TIMING_AFTER_COMPLETE) {
 				error = ProjectOrderComplete(po);
 				error = purchaseInvoiceCreateOrderLine(po);
+				error = OrderCompleteDeleteNdC(po);
 			}
 			if (timing == TIMING_AFTER_VOID || timing == TIMING_AFTER_REVERSECORRECT
 					|| timing == TIMING_AFTER_REACTIVATE) {
@@ -768,6 +769,30 @@ implements ModelValidator {
 	            pay.set_ValueOfColumn("ControlAmt", oLine.getLineNetAmt());
 	            pay.saveEx();                    
 	        }
+		return "";
+	}
+	
+	
+	private String OrderCompleteDeleteNdC(PO A_PO) {
+		MOrder order = (MOrder) A_PO;
+		if (!order.isSOTrx())
+			return "";
+		if (!order.getC_DocType().getDocSubTypeSO().equals(MDocType.DOCSUBTYPESO_OnCreditOrder))
+			return "";
+		String where =  MOrder.COLUMNNAME_C_Order_ID+"=?"
+				+ " AND " + MOrder.COLUMNNAME_DocStatus + " IN ('IP','DR')";
+		List<MInvoice> list = new Query(order.getCtx(), MInvoice.Table_Name, where, order.get_TrxName())
+				.setClient_ID()
+				.setOnlyActiveRecords(true)
+				.setParameters(order.getC_Order_ID())
+				.list();
+		for(MInvoice invoice: list) {
+			if (invoice.getGrandTotal().equals(Env.ZERO)) {
+				invoice.setC_Order_ID(0);
+				invoice.deleteEx(true);
+			}
+		}
+       
 		return "";
 	}
 

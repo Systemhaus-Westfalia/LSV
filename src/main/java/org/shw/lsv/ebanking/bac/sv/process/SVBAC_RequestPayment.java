@@ -41,8 +41,11 @@ public class SVBAC_RequestPayment extends SVBAC_RequestPaymentAbstract
 	protected String doIt() throws Exception
 	{
 		MPayment payment = new MPayment(getCtx(), getRecord_ID(), get_TrxName());
+		if (payment.getDocStatus().equals(MPayment.DOCSTATUS_Voided) || payment.getDocStatus().equals(MPayment.DOCSTATUS_Reversed) 
+				|| !payment.isProcessed())
+			return "Error en estado de documento: " + payment.getDocStatus();
 		String swiftCode = payment.getC_BankAccount().getC_Bank().getSwiftCode();
-		if (!swiftCode.equals(EBankingConstants.SWIFTBAC)) {
+		if (swiftCode == null || !swiftCode.equals(EBankingConstants.SWIFTBAC)) {
 			return "Este banco no ofrece online banking";
 		}
 		String evtCd = payment.get_ValueAsString("evtCd");

@@ -162,7 +162,8 @@ public final class RequestParamsFactory {
     	String countrycode = swiftDest.substring(4, 6);
         String BIC_SISTEMAS_AEREOS   = bank.get_ValueAsString("BIC_SISTEMAS_AEREOS");
         String BIC_BAC_EL_SALVADOR   = bank.getSwiftCode();
-        String PYMT_DOCUMENT_ID      = "PYMT-INT-" + TestDateUtils.getTodayDate() + "-" + payment.getC_Payment_ID();
+        String PYMT_DOCUMENT_ID      = "PYMT-INT-" + payment.getC_Payment_ID();
+        //TestDateUtils.getTodayDate() + "-" + payment.getC_Payment_ID();
         // Generate a unique ID for testing purposes by appending a random 5-digit number.
                                        // java.util.concurrent.ThreadLocalRandom.current().nextInt(10000, 100000);
         String MSGDEFIDR             = "PaymentInitiationServiceV03";
@@ -192,6 +193,9 @@ public final class RequestParamsFactory {
 
         String PAYMENT_AMOUNT        = payment.getPayAmt().toString();
         BigDecimal paymentAmount     = payment.getPayAmt().setScale(2);
+
+        payment.set_ValueOfColumn("MsgId", PYMT_DOCUMENT_ID);
+        payment.saveEx();
 
         return new RequestParams()
             .setBicfiFr(       BIC_SISTEMAS_AEREOS)
