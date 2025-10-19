@@ -82,7 +82,8 @@ public final class RequestParamsFactory {
         String MSGDEFIDR             = "PaymentInitiationServiceV03";
         String BIZSVC                = bank.get_ValueAsString("BIZSVC");
         String CURRENCY              = payment.getC_Currency().getISO_Code();
-        String FININSTNID_MMBID      = "001";   // Código local de banco destino (Indica si es una transferencia hacia una cuenta BAC o a otro banco (ACH/SINPE)), los valores esperados para ambiente de pruebas son:
+        String FININSTNID_MMBID		 = bank.get_ValueAsString("FININSTNID_MMBID");
+       // String FININSTNID_MMBID      = "001";   // Código local de banco destino (Indica si es una transferencia hacia una cuenta BAC o a otro banco (ACH/SINPE)), los valores esperados para ambiente de pruebas son:
                                                 // ACH/SINPE (Panamá: 1588, Costa Rica: 151, Nicaragua: 001, Honduras: 001, El Salvador: 001, Guatemala: 101) (Este es solo un ejemplo, solicitar a su ejecutivo la lista completa de códigos de banco ACH, de ser necesario)
                                                 // ENTRE CUENTAS BAC (Panamá: 1384, Costa Rica: 102, Nicaragua: 007, Honduras: 024, El Salvador: 025, Guatemala: 042)
 
@@ -94,7 +95,7 @@ public final class RequestParamsFactory {
         String CODIGO_PROVEEDOR      = payment.getC_BPartner().getValue();
         String INSTRUCTION_PRIORITY  = "NORM";
         String RECEIVER_ACCOUNT      = payment.getC_BP_BankAccount().getAccountNo();
-        String DBTRAGT_COUNTRY       = "SV";
+        String DBTRAGT_COUNTRY       = BIC_BAC_EL_SALVADOR.substring(4, 6);
 
         String PAYMENT_REFERENCE     = payment.getC_BPartner().getValue() + " " + payment.getDocumentNo();
         String CAT_PURPOSE_CD        = "SUPP";
@@ -177,7 +178,7 @@ public final class RequestParamsFactory {
         String CODIGO_PROVEEDOR      = payment.getC_BPartner().getValue();
         String INSTRUCTION_PRIORITY  = "NORM";
         String RECEIVER_ACCOUNT      = payment.getC_BP_BankAccount().getAccountNo();
-        String DBTR_AGT_COUNTRY       = "SV";
+        String DBTR_AGT_COUNTRY       = BIC_BAC_EL_SALVADOR.substring(4, 6);
         String CAT_PURPOSE_CD        = "SUPP";
         String CDTR_COUNTRY          = countrycode;
         String CDTR_CITY             = partnerLocation.getC_Location().getCity();
@@ -256,7 +257,8 @@ public final class RequestParamsFactory {
         String MSGDEFIDR             = "PaymentInitiationServiceV03";
         String BIZSVC                = bank.get_ValueAsString("BIZSVC");
         String CURRENCY              = payment.getC_BankAccount().getC_Currency().getISO_Code();
-        String CDTR_AGT_MEMBER       = "025";  // Código local de banco destino (Indica si es una transferencia hacia una cuenta BAC o a otro banco (ACH/SINPE)), los valores esperados para ambiente de pruebas son:
+        String CDTR_AGT_MEMBER		 = bank.get_ValueAsString("CDTR_AGT_MEMBER");
+        //String CDTR_AGT_MEMBER       = "025";  // Código local de banco destino (Indica si es una transferencia hacia una cuenta BAC o a otro banco (ACH/SINPE)), los valores esperados para ambiente de pruebas son:
                                                // ACH/SINPE (Panamá: 1588, Costa Rica: 151, Nicaragua: 001, Honduras: 001, El Salvador: 001, Guatemala: 101) (Este es solo un ejemplo, solicitar a su ejecutivo la lista completa de códigos de banco ACH, de ser necesario)
                                                // ENTRE CUENTAS BAC (Panamá: 1384, Costa Rica: 102, Nicaragua: 007, Honduras: 024, El Salvador: 025, Guatemala: 042)
         String BAC_ACCOUNT_ID        = payment.getC_BankAccount().getAccountNo();
@@ -266,7 +268,7 @@ public final class RequestParamsFactory {
         String CODIGO_PROVEEDOR      = payment.getC_BPartner().getValue();
         String INSTRUCTION_PRIORITY  = "NORM";
         String RECEIVER_ACCOUNT      = payment.getC_BP_BankAccount().getAccountNo();
-        String DBTR_AGT_COUNTRY       = "SV";
+        String DBTR_AGT_COUNTRY       = BIC_BAC_EL_SALVADOR.substring(4, 6);
         String CAT_PURPOSE_CD        = "SUPP";
         String PAYMENT_REFERENCE     = payment.getC_BPartner().getValue() + " " + payment.getDocumentNo();
         String currentTimestamp      = TestDateUtils.getCurrentApiTimestamp();

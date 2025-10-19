@@ -45,13 +45,10 @@ public class SVBAC_RequestPayment extends SVBAC_RequestPaymentAbstract
 				|| !payment.isProcessed())
 			return "Error en estado de documento: " + payment.getDocStatus();
 		String swiftCode = payment.getC_BankAccount().getC_Bank().getSwiftCode();
-		if (swiftCode == null || !swiftCode.equals(EBankingConstants.SWIFTBAC)) {
-			return "Este banco no ofrece online banking";
-		}
 		String evtCd = payment.get_ValueAsString("evtCd");
 		if (evtCd.equals(EBankingConstants.REQUEST_RECIBIDO))
 			return "El Pago ya fue mandado";
-
+		String swiftCountry = swiftCode.substring(4, 6);
 		String transfertype = "";
 		String swiftCodeBPartner = payment.getC_BP_BankAccount().getC_Bank().getSwiftCode();
 		String result = "";
@@ -60,7 +57,7 @@ public class SVBAC_RequestPayment extends SVBAC_RequestPaymentAbstract
 			return result;
 		if (swiftCode.equals(swiftCodeBPartner))
 			transfertype = EBankingConstants.TRANSFERBACTOBAC;
-		else if (!swiftCode.equals(swiftCodeBPartner) && swiftCodeBPartner.substring(4, 6).equals("SV")) {
+		else if (!swiftCode.equals(swiftCodeBPartner) && swiftCodeBPartner.substring(4, 6).equals(swiftCountry)) {
 			transfertype = EBankingConstants.TRANSFERDOM;
 		}
 		else

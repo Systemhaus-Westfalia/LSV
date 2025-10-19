@@ -270,7 +270,8 @@ public class SVBACStatmentOfAccount implements IDeclarationProvider {
 				.header(HttpHeaders.AUTHORIZATION, "Bearer " + newTokenMan)
 				.header(HttpHeaders.CONTENT_TYPE, "application/json")
 				.header(HttpHeaders.ACCEPT, "*/*")
-				.header("X-IBM-Client-Id", "6b443615f7adf11b1149f03da1c0f10f");
+				.header("X-IBM-Client-Id", registration.getParameterValue("X-IBM-Client-Id"));
+				//.header("X-IBM-Client-Id", "6b443615f7adf11b1149f03da1c0f10f");
 
 
 		System.out.println("StatementOfAccount: " + jsonOutput);

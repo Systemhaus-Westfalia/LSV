@@ -227,7 +227,7 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
 				.header(HttpHeaders.AUTHORIZATION, "Bearer " + newTokenMan)
 				.header(HttpHeaders.CONTENT_TYPE, "application/json")
 				.header(HttpHeaders.ACCEPT, "*/*")
-				.header("X-IBM-Client-Id", "6b443615f7adf11b1149f03da1c0f10f");
+				.header("X-IBM-Client-Id", registration.getParameterValue("X-IBM-Client-Id"));
 
 
 		System.out.println("Request: " + jsonOutput);
@@ -241,6 +241,8 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
 		String output = response.readEntity(String.class);
 		if (response.getStatus() == 403 || status == 401) {
 			System.out.println("Verlasse Request Payment: Status: " + status + "output:" + output);
+			payment.set_ValueOfColumn("transactionStatusReason", output);
+			payment.saveEx();
 			return "Response:" +  output;
 		}
 
@@ -351,7 +353,7 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
 				.header(HttpHeaders.AUTHORIZATION, "Bearer " + newTokenMan)
 				.header(HttpHeaders.CONTENT_TYPE, "application/json")
 				.header(HttpHeaders.ACCEPT, "*/*")
-				.header("X-IBM-Client-Id", "6b443615f7adf11b1149f03da1c0f10f");
+				.header("X-IBM-Client-Id", registration.getParameterValue("X-IBM-Client-Id"));
 
 
 
@@ -363,7 +365,9 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
 		int status = response.getStatus();
 		String output = response.readEntity(String.class);
 		if (response.getStatus() == 403 || status == 401) {
-			return "";
+			payment.set_ValueOfColumn("transactionStatusReason", output);
+			payment.saveEx();
+			return output;
 		}
 
 
@@ -486,6 +490,8 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
 		int status = response.getStatus();
 		String output = response.readEntity(String.class);
 		if (response.getStatus() == 403 || status == 401) {
+			payment.set_ValueOfColumn("transactionStatusReason", output);
+			payment.saveEx();
 			return "";
 		}
 
