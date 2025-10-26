@@ -282,6 +282,9 @@ public class SVBACStatmentOfAccount implements IDeclarationProvider {
 		int status = response.getStatus();
 		System.out.println("EBanking Kontobewegungen: " + status);
 		String output = response.readEntity(String.class);
+		System.out.println("Response");
+		System.out.println(output);
+		
 		if (response.getStatus() == 403 || status == 401) {
 			System.out.println("Verlasse Process Kontobewegung: Status: " +  status + "output: " + output);
 			return "Response:" +  output;
@@ -463,6 +466,7 @@ public class SVBACStatmentOfAccount implements IDeclarationProvider {
                             impbankStatement.setDateAcct(timestamp);
                             impbankStatement.setReferenceNo(entry.getNtryRef());
                             impbankStatement.setLineDescription(entry.getAddtlNtryInf());
+                            impbankStatement.setMemo(entry.getAddtlNtryInf());
                             impbankStatement.saveEx();
                            // summary.append("        Amt-Ccy:     ").append(balance.getAmt().getCcy() != null ? balance.getAmt().getCcy() : "N/A").append("\n");
                             //summary.append("        Amt-Amt:     ").append(balance.getAmt().getAmt() != null ? balance.getAmt().getAmt() : "N/A").append("\n");

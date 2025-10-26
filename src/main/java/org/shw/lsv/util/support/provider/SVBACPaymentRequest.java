@@ -364,6 +364,9 @@ public class SVBACPaymentRequest implements IDeclarationProvider {
 
 		int status = response.getStatus();
 		String output = response.readEntity(String.class);
+		System.out.println("Response");
+		System.out.println(output);
+		
 		if (response.getStatus() == 403 || status == 401) {
 			payment.set_ValueOfColumn("transactionStatusReason", output);
 			payment.saveEx();

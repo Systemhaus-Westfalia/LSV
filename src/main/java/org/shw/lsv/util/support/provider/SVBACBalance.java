@@ -248,8 +248,11 @@ public class SVBACBalance implements IDeclarationProvider {
 
 		int status = response.getStatus();
 		System.out.println("EBanking Status json_KontoStand: " + status);
-
 		String output = response.readEntity(String.class);
+
+		System.out.println("Response");
+		System.out.println(output);
+		
 		if (status == 403 || status == 401) { 	
 
 			System.out.println("Verlasse Process Kontostand: Status: " +  status + "output: " + output);

@@ -257,6 +257,9 @@ public class SVBACPaymentStatus implements IDeclarationProvider {
 		int status = response.getStatus();
 		System.out.println("EBanking PaymentStatus: " + status);
 		String output = response.readEntity(String.class);
+		System.out.println("Response");
+		System.out.println(output);
+		
 		if (response.getStatus() == 403 || status == 401) {
 			System.out.println("Verlasse Process Zahlungsstatus: Status: " +  status + "output: " + output);
 			return "Response:" +  output;
