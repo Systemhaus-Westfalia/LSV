@@ -1,15 +1,15 @@
 plugins {
-	id 'java-library'
-	id 'maven-publish'
-	id 'signing'
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
 }
 
 ext {
-    libraryRepo     = "https://maven.pkg.github.com/Systemhaus-Westfalia/LSV"
-    patchVersion    = System.getenv("ADEMPIERE_LIBRARY_VERSION") ?: "local-1.0.1"
-    baseVersion     = "shw-air-terminal-vertical-1.0.57"
-    baseGroupId     = "com.erpya"
-    publishGroupId  = "com.shw"
+    libraryRepo       = "https://maven.pkg.github.com/Systemhaus-Westfalia/LSV"
+    patchVersion      = System.getenv("ADEMPIERE_LIBRARY_VERSION") ?: "local-1.0.1"
+    baseVersion       = "shw-air-terminal-vertical-1.0.57"
+    baseGroupId       = "com.erpya"
+    publishGroupId    = "com.shw"
 }
 
 
@@ -22,8 +22,8 @@ repositories {
 
 allprojects {
     tasks.withType(Javadoc) {
-    	options.addStringOption('Xdoclint:none', '-quiet')
-   	}
+        options.addStringOption('Xdoclint:none', '-quiet')
+       }
 }
 
 compileJava { 
@@ -41,25 +41,25 @@ dependencies {
             '*.jar'
         ]
     )
-    //	ADempiere Core
+    //     ADempiere Core
     api "${baseGroupId}:base:${baseVersion}"
     api "${baseGroupId}:human-resource-and-payroll:${baseVersion}"
     api "${baseGroupId}:cashflow:${baseVersion}"
-	api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
-	api 'org.glassfish.jersey.core:jersey-client:2.34'
-	api 'org.glassfish.jersey.inject:jersey-hk2:2.34'
+    api 'javax.ws.rs:javax.ws.rs-api:2.1.1'
+    api 'org.glassfish.jersey.core:jersey-client:2.34'
+    api 'org.glassfish.jersey.inject:jersey-hk2:2.34'
 
-	// JSON in Java
-	// https://mvnrepository.com/artifact/org.json/json
-	api 'org.json:json:20211205'
-	
-	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-	api 'org.apache.commons:commons-lang3:3.0'
+    // JSON in Java
+    // https://mvnrepository.com/artifact/org.json/json
+    api 'org.json:json:20211205'
+    
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    api 'org.apache.commons:commons-lang3:3.0'
 
-	// https://mvnrepository.com/artifact/org.telegram/telegrambots
-	api 'org.telegram:telegrambots:6.0.1'
+    // https://mvnrepository.com/artifact/org.telegram/telegrambots
+    api 'org.telegram:telegrambots:6.0.1'
 
-	// https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+    // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
     api 'com.itextpdf:itextpdf:5.5.2'
 
 
@@ -68,26 +68,26 @@ dependencies {
 
 sourceSets {
     main {
-         java {
+          java {
             srcDirs = ['src/main/java']
-         }
+          }
     }
 }
 
 jar {
-	manifest {
-		attributes(
-			"Implementation-Title": "Localizacion El Salvador (Sistemas Aereos)",
-			"Implementation-Version": patchVersion,
-			"EntityType": "LSV-SAPROD"
-		)
+    manifest {
+        attributes(
+            "Implementation-Title": "Localizacion El Salvador (Sistemas Aereos)",
+            "Implementation-Version": patchVersion,
+            "EntityType": "LSV-SAPROD"
+        )
     }
 }
 
 
 publishing {
     repositories {
-		mavenLocal()
+        mavenLocal()
         maven {
             url = libraryRepo
             credentials {
@@ -99,11 +99,11 @@ publishing {
     
     publications {
         maven(MavenPublication) {
-			groupId = publishGroupId
-			artifactId = 'lsv-saprod'
-			version = patchVersion
-           	from components.java
-           	pom {
+            groupId = publishGroupId
+            artifactId = 'lsv-saprod'
+            version = patchVersion
+                from components.java
+                pom {
                 name = 'Localización El Salvador (Sistemas Aereos)'
                 description = 'Localización para El salvador (Sistemas Aereos) de Systemhaus Westfalia'
                 url = 'http://adempiere.io/'
@@ -121,6 +121,6 @@ publishing {
                     }
                 }
             }
-		}
-	}
+        }
+    }
 }

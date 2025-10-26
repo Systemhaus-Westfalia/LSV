@@ -8,14 +8,14 @@ on:
   # Triggers the workflow on push or pull request events but only for the develop branch
   push:
     branches:
-      - '*'         # matches every branch that doesn't contain a '/'
-      - '*/*'       # matches every branch containing a single '/'
-      - '**'        # matches every branch
+      - '*'          # matches every branch that doesn't contain a '/'
+      - '*/*'        # matches every branch containing a single '/'
+      - '**'         # matches every branch
   pull_request:
     branches:
-      - '*'         # matches every branch that doesn't contain a '/'
-      - '*/*'       # matches every branch containing a single '/'
-      - '**'        # matches every branch
+      - '*'          # matches every branch that doesn't contain a '/'
+      - '*/*'        # matches every branch containing a single '/'
+      - '**'         # matches every branch
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
