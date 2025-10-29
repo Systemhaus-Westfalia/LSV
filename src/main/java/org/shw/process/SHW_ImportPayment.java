@@ -537,7 +537,7 @@ public class SHW_ImportPayment extends SvrProcess
 				
 
 				if (imp.get_ValueAsString(MPayment.COLUMNNAME_Description) != null && imp.get_ValueAsString((MPayment.COLUMNNAME_Description)).length()> 0)
-					payment.setDescription((MPayment.COLUMNNAME_Description));
+					payment.setDescription(imp.get_ValueAsString((MPayment.COLUMNNAME_Description)));
 				 
 				if(imp.get_Value(MPayment.COLUMNNAME_User1_ID) != null)
 					payment.setUser1_ID(imp.get_ValueAsInt(MPayment.COLUMNNAME_User1_ID));
