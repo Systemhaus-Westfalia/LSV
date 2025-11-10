@@ -97,7 +97,9 @@ public final class RequestParamsFactory {
         String RECEIVER_ACCOUNT      = payment.getC_BP_BankAccount().getAccountNo();
         String DBTRAGT_COUNTRY       = BIC_BAC_EL_SALVADOR.substring(4, 6);
 
-        String PAYMENT_REFERENCE     = payment.getC_BPartner().getValue() + " " + payment.getDocumentNo();
+        //String PAYMENT_REFERENCE     = payment.getC_BPartner().getValue() + " " + payment.getDocumentNo();
+
+        String PAYMENT_REFERENCE     = payment.getDescription();
         String CAT_PURPOSE_CD        = "SUPP";
 
         String currentTimestamp      = TestDateUtils.getCurrentApiTimestamp();
@@ -184,7 +186,10 @@ public final class RequestParamsFactory {
         String CDTR_CITY             = partnerLocation.getC_Location().getCity();
         
         String CDTR_ADDRESS          = partnerLocation.getC_Location().getAddress1() + " " + partnerLocation.getC_Location().getAddress2();
-        String PAYMENT_REFERENCE     = "06140904181038";  // Max 35 Zeichen
+
+        //String PAYMENT_REFERENCE     = payment.getC_BPartner().getValue() + " " + payment.getDocumentNo();
+
+        String PAYMENT_REFERENCE     = payment.getDescription();        
         String PAYMENT_PURPOSE       = "26.3"; // APLICA PARA EL SALVADOR ÚNICAMENTE. Código propietario, listado de códigos definidos localmente para el concepto de transferencia solicitado por el banco central de El Salvador
         String TYPE_CODE             = "SVGS"; // Este campo NO es necesario para Costa Rica. Especifica la naturaleza o el uso de la cuenta, los valores esperados son:
                                                // SVGS: Cuenta de ahorros, CASH: Cuenta Corriente, LOAN: Cuenta para préstamos y tarjetas
@@ -270,7 +275,9 @@ public final class RequestParamsFactory {
         String RECEIVER_ACCOUNT      = payment.getC_BP_BankAccount().getAccountNo();
         String DBTR_AGT_COUNTRY       = BIC_BAC_EL_SALVADOR.substring(4, 6);
         String CAT_PURPOSE_CD        = "SUPP";
-        String PAYMENT_REFERENCE     = payment.getC_BPartner().getValue() + " " + payment.getDocumentNo();
+        //String PAYMENT_REFERENCE     = payment.getC_BPartner().getValue() + " " + payment.getDocumentNo();
+
+        String PAYMENT_REFERENCE     = payment.getDescription();
         String currentTimestamp      = TestDateUtils.getCurrentApiTimestamp();
         String currentDate           = TestDateUtils.getTodayDate();
         Integer numberOfTransactions = 1;

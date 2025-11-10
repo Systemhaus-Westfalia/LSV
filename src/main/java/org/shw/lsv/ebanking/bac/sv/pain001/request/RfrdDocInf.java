@@ -28,12 +28,14 @@ public class RfrdDocInf {
     /**
      * @param nb the Nb (Referred Document Number) to be set.<br>
      * The parameter is validated: null not allowed.<br>
-     * Example: "INV-112"
+     * Example: "INV-112" Max 35 digits
      */
     public void setNb(String nb) {
         if (nb == null) {
             throw new IllegalArgumentException("Wrong parameter 'nb' (null) in setNb()");
         }
+        if (nb.length()>35)
+        	nb = nb.substring(0, 35);
         this.nb = nb;
     }
 
