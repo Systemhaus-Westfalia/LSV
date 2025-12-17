@@ -170,7 +170,8 @@ public class EBankingConstants {
 	public static final String PATTERN_XMLNS        = "^urn:iso:std:iso:20022:tech:xsd:[a-z0-9\\.]+$";
 	public static final String PATTERN_NTRYREF      = "[0-9A-Za-z/\\-\\?:().,'\\+ ]{1,35}";
 	public static final String PATTERN_CDTDBTIND    = "CRDT|DBIT";
-	public static final String PATTERN_ADDTLNTRYINF = "[0-9A-Za-z/\\-\\?:().,'\\+ ]{1,140}";
+	//public static final String PATTERN_ADDTLNTRYINF = "[0-9A-Za-z/\\-\\?:().,'\\+ ]{1,140}";
+	  public static final String PATTERN_ADDTLNTRYINF = "[0-9\\p{L}/\\?:().,'\\\\+ -]{1,140}";
 	public static final String PATTERN_CD_STATUS    = "[A-Z]{4}";
 	public static final String PATTERN_ELCTRNCSEQNB = "[0-9]{1,5}";
 	public static final String PATTERN_PGNB         = "^[1-9][0-9]{0,4}$"; // 1-5 digits, no leading zeros

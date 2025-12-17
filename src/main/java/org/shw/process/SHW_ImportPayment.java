@@ -448,7 +448,7 @@ public class SHW_ImportPayment extends SvrProcess
 		commitEx();
 		//Import Bank Statement
 		sql = new StringBuffer("SELECT * FROM I_Payment"
-			+ " WHERE I_IsImported='N'"
+			+ " WHERE I_IsImported='N' " + clientCheck
 			+ " ORDER BY C_BankAccount_ID, CheckNo, DateTrx, R_AuthCode");
 			
 		MBankAccount account = null;
